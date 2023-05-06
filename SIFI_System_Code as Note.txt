@@ -1,0 +1,233 @@
+/*
+
+SAIFI SYSTEM
+THIS SYSTEM PREPARED BY:
+
+1-GHADA ALSULAMI.
+2-WAAD ALHARBI.
+3-SARAH ALJOHANI.
+
+
+*/
+
+implement main
+    open core
+
+domains
+    skill = symbol.
+    question = symbol.
+
+class facts
+    yes_ForStorage : (string).
+    no_ForStorage : (string).
+
+class predicates
+    start : ().
+    main : ().
+    trainingBody : (symbol [out]) nondeterm.
+    skill : (symbol) determ.
+    check : (question, skill) determ.
+    questions : (symbol, symbol) determ.
+    saveAnswere : (string, string) determ.
+    clear_yes : ().
+    clear_no : ().
+
+clauses
+    run() :-
+        console::init(),
+        stdio::write("---------------------------------------------\n"),
+        stdio::write("       Welcome to Saifi System\n"),
+        stdio::write("---------------------------------------------\n"),
+        start().
+
+    start() :-
+        main,
+        stdio::write("\nDo you wanna take a test again(y/n)?"),
+        Answer1 = stdio::readLine(),
+        stdio::write(Answer1),
+        Answer1 >< "n",
+        !,
+        clear_yes,
+        clear_no,
+        start().
+
+    start() :-
+        stdio::write("\n---------------------------------------------\n"),
+        stdio::write("    Thank you for using our system     \n"),
+        stdio::write("---------------------------------------------\n").
+
+    main() :-
+        trainingBody(TrainingBody),
+        stdio::write("\nThe test has finished"),
+        stdio::write("\nThe appropiate company for you is ", TrainingBody),
+        !.
+
+    main() :-
+        stdio::write("\nSorry we couldn't find the appropriate company! ").
+
+%check predicates
+    check(_, Skill) :-
+        yes_ForStorage(Skill),
+        !.
+    check(Question, Skill) :-
+        not(no_ForStorage(Skill)),
+        questions(Question, Skill).
+
+    questions(Question, Skill) :-
+        stdio::write(Question),
+        Answer = stdio::readLine(),
+        saveAnswere(Skill, Answer),
+        Answer = "y".
+
+    saveAnswere(Skill, "y") :-
+        assert(yes_ForStorage(Skill)).
+    saveAnswere(Skill, "n") :-
+        assert(no_ForStorage(Skill)).
+
+%clear answer
+    clear_yes() :-
+        retract(yes_ForStorage(_)),
+        fail.
+    clear_yes().
+
+    clear_no() :-
+        retract(no_ForStorage(_)),
+        fail.
+    clear_no().
+
+% Skills
+    %Smart Methods
+    skill("AI") :-
+        check("\nAre you interested in training in the Artificial intelligence field?", "AI").
+    skill("Machine learning") :-
+        check("\nDo you have an idea of machine learning?", "Machine learning").
+    skill("Deep learning") :-
+        check("\nDo you have an idea of deep learning?", "Deep learning").
+    skill("Robots") :-
+        check("\nDo you want to know more about robots?", "Robots").
+
+%SDAIA
+    skill("Data science") :-
+        check("\nDo you want to know more about data science?", "Data science").
+
+%Safe Decision Company
+    skill("Cybersecurity") :-
+        check("\nAre you interested in training in the Cybersecurity field?", "Cybersecurity").
+    skill("Network Security Control") :-
+        check("\nDo you have an idea of network security control?", "Network Security Control").
+    skill("Understanding of hacking") :-
+        check("\nDo you have an understanding of hacking?", "Understanding of hacking").
+    skill("Scripting") :-
+        check("\nDo you want to work more in scripting?", "Scripting").
+
+%Amaz
+    skill("Web Development") :-
+        check("\nDo you want to explore more about the world of web development?", "Web Development").
+    skill("JS language") :-
+        check("\nDo you have an idea of JS language?", "JS language").
+    skill("HTML language") :-
+        check("\nDo you have an idea of HTML language?", "HTML language").
+    skill("CSS language") :-
+        check("\nDo you have an idea of CSS language ?", "CSS language").
+
+    %WSM
+    skill("Colors") :-
+        check("\nAre you care about color, spacing, patterns and typography when you see any application?", "Colors").
+    skill("Visual element of  UI") :-
+        check("\nDo you want to significantly understand how each visual element impacts the overall user experience?", "Visual element of  UI").
+    skill("Collaboration") :-
+        check("\nDo you have good collaboration and communication with a lot of people? ", "Collaboration").
+    skill("User interface design") :-
+        check("\nDo you wanna be UI design?", "User interface design").
+
+%SABIC
+    skill("System Analysis") :-
+        check("\nHave you ever worked in system analysis and have you an idea about it?", "System Analysis").
+    skill("Critical thinking") :-
+        check("\nAre you ready for critical thinking?", "Critical thinking").
+    skill("Communication and negotiating skills") :-
+        check("\nDo you have good communication and negotiating skills?", "Communication and negotiating skills").
+    skill("Looking at different aspects when making a decision") :-
+        check("\nAre you often looking at different aspects when you make a decision?", "Looking at different aspects when making a decision").
+
+%Banks Environment
+    skill("financial audit") :-
+        check("\nAre you interested to training in the financial audit?", "financial audit").
+    skill("Attention to Detail") :-
+        check("\nDo you see yourself as Attention to Detail person?", "Attention to Detail").
+    skill("Database knowledge") :-
+        check("\nDo you have an understanding of Database knowledge ?", "Database knowledge").
+    skill("Report Writing") :-
+        check("\n Do you have skill in Report Writing ?", "Report Writing").
+%STC
+    skill("Data analysis") :-
+        check("\nAre you interested in training in Data analysis?", "Data analysis").
+    skill("Spreadsheets") :-
+        check("\nDo you have skill in dealing with Spreadsheets?", "Spreadsheets").
+    skill("Statistical programming languages") :-
+        check("\nDo you have an understanding of Statistical programming languages?", "Statistical programming languages").
+    skill("Data warehousing") :-
+        check("\n Do you have an idea in Data warehousing ?", "Data warehousing").
+
+%THIQAH Business Services
+    skill("Project management") :-
+        check("\nAre you interested in training in Project management?", "Project management").
+    skill("communication and team skills") :-
+        check("\nDo you have communication and team skills?", "communication and team skills").
+    skill("technical skills") :-
+        check("\nDo you have skill in dealing with technical things?", "technical skill").
+    skill("Risk Management") :-
+        check("\n Do you have an  understanding in Risk Management?", "Risk Management").
+
+%Rules
+%1-
+    trainingBody("Smart Methods") :-
+        skill("AI"),
+        skill("Machine learning"),
+        skill("Deep learning"),
+        skill("Robots").
+    trainingBody("SDAIA") :-
+        skill("AI"),
+        skill("Machine learning"),
+        skill("Deep learning"),
+        skill("Data science").
+    trainingBody("Safe Decision Company") :-
+        skill("Cybersecurity"),
+        skill("Network Security Control"),
+        skill("Understanding of hacking"),
+        skill("Scripting").
+    trainingBody("Amaz") :-
+        skill("Web Development"),
+        skill("JS language"),
+        skill("HTML language"),
+        skill("CSS language").
+    trainingBody("WSM") :-
+        skill("User interface design"),
+        skill("Colors"),
+        skill("Visual element of  UI"),
+        skill("Collaboration").
+    trainingBody("SABIC") :-
+        skill("System Analysis"),
+        skill("Critical thinking"),
+        skill("Communication and negotiating skills"),
+        skill("Looking at different aspects when making a decision").
+    trainingBody("Banks Environment") :-
+        skill("financial audit"),
+        skill("Attention to Detail"),
+        skill("Database knowledge"),
+        skill("Report Writing").
+    trainingBody("STC") :-
+        skill("Data analysis"),
+        skill("Spreadsheets"),
+        skill("Statistical programming languages"),
+        skill("Data warehousing").
+    trainingBody("THIQAH Business Services") :-
+        skill("Project management"),
+        skill("communication and team skills"),
+        skill("technical skills"),
+        skill("Risk Management").
+
+end implement main
+
+goal
+    console::runUtf8(main::run).
